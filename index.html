@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a2f4e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>תזכורת תרופות</title>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1b2a;
+    --surface: #1a2f4e;
+    --surface2: #1f3a5f;
+    --accent: #4fc3f7;
+    --accent2: #81d4fa;
+    --green: #4caf50;
+    --green-light: #a5d6a7;
+    --red: #ef5350;
+    --text: #e8f4fd;
+    --text-muted: #8eb8d4;
+    --border: rgba(79,195,247,0.18);
+    --shadow: 0 8px 32px rgba(0,0,0,0.45);
+    --radius: 18px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Assistant', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    direction: rtl;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 10%, rgba(79,195,247,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 10% 80%, rgba(76,175,80,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app-wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 100px;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--surface) 0%, #0f2236 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 22px 22px 18px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .app-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  .header-icon {
+    font-size: 26px;
+    filter: drop-shadow(0 0 8px rgba(79,195,247,0.5));
+  }
+
+  .header-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 77px;
+    z-index: 99;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+  /* Sections */
+  .section {
+    padding: 20px 16px;
+    display: none;
+  }
+
+  .section.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s;
+  }
+
+  .card:active { transform: scale(0.99); }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Form elements */
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  input[type="text"],
+  input[type="time"] {
+    width: 100%;
+    padding: 13px 15px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    font-family: 'Assistant', sans-serif;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 14px;
+    direction: rtl;
+  }
+
+  input[type="text"]:focus,
+  input[type="time"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,195,247,0.15);
+  }
+
+  input[type="time"] {
+    direction: ltr;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 10px;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-family: 'Assistant', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    user-select: none;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent) 0%, #0288d1 100%);
+    color: #0d1b2a;
+  }
+
+  .btn-primary:hover { filter: brightness(1.08); }
+
+  .btn-success {
+    background: linear-gradient(135deg, var(--green) 0%, #2e7d32 100%);
+    color: #fff;
+  }
+
+  .btn-danger {
+    background: rgba(239,83,80,0.15);
+    color: var(--red);
+    border: 1px solid rgba(239,83,80,0.3);
+    padding: 9px 14px;
+    font-size: 13px;
+    width: auto;
+    border-radius: 8px;
+  }
+
+  .btn-notify {
+    background: linear-gradient(135deg, #7c4dff 0%, #512da8 100%);
+    color: #fff;
+    font-size: 14px;
+    padding: 13px;
+  }
+
+  /* Notification status */
+  .notif-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 14px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .notif-status.granted {
+    background: rgba(76,175,80,0.12);
+    border: 1px solid rgba(76,175,80,0.3);
+    color: var(--green-light);
+  }
+
+  .notif-status.denied {
+    background: rgba(239,83,80,0.12);
+    border: 1px solid rgba(239,83,80,0.3);
+    color: #ef9a9a;
+  }
+
+  .notif-status.default {
+    background: rgba(79,195,247,0.08);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .status-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .granted .status-dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .denied .status-dot { background: var(--red); }
+  .default .status-dot { background: var(--text-muted); }
+
+  /* Medication list */
+  .med-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+    transition: background 0.15s;
+  }
+
+  .med-info { flex: 1; }
+
+  .med-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .med-time {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: 3px;
+    direction: ltr;
+    display: inline-block;
+  }
+
+  .med-icon { font-size: 24px; margin-left: 12px; }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+  }
+
+  .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; line-height: 1.6; }
+
+  /* Calendar */
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .cal-month {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .cal-nav {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    border-radius: 8px;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    transition: background 0.15s;
+    user-select: none;
+  }
+
+  .cal-nav:active { background: var(--accent); color: #0d1b2a; }
+
+  .cal-grid-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+
+  .cal-day-name {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    padding: 4px 0;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+  }
+
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.15s;
+    position: relative;
+    user-select: none;
+  }
+
+  .cal-day.empty { background: transparent; cursor: default; }
+
+  .cal-day.future {
+    color: rgba(255,255,255,0.2);
+    cursor: not-allowed;
+  }
+
+  .cal-day.past, .cal-day.today {
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  .cal-day.past:active, .cal-day.today:active {
+    transform: scale(0.92);
+  }
+
+  .cal-day.today {
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  .cal-day.today::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .cal-day.taken {
+    background: linear-gradient(135deg, var(--green) 0%, #2e7d32 100%);
+    color: #fff;
+    border-color: var(--green);
+    font-weight: 800;
+  }
+
+  .cal-day.taken::before {
+    content: '✓';
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    font-size: 9px;
+    opacity: 0.8;
+  }
+
+  /* Stats */
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .stat-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-num.green { color: var(--green); }
+  .stat-num.yellow { color: #ffb74d; }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-weight: 600;
+  }
+
+  /* Med selector for calendar */
+  .med-selector {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .med-chip {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Assistant', sans-serif;
+    user-select: none;
+  }
+
+  .med-chip.active {
+    border-color: var(--accent);
+    background: rgba(79,195,247,0.12);
+    color: var(--accent);
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #1e3a5f;
+    border: 1px solid var(--accent);
+    color: var(--text);
+    padding: 13px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap;
+    max-width: 90vw;
+    text-align: center;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Bottom nav */
+  .bottom-nav {
+    display: none; /* using tabs instead */
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 16px 0;
+  }
+
+  /* Today's summary bar */
+  .today-bar {
+    background: linear-gradient(135deg, rgba(79,195,247,0.12) 0%, rgba(76,175,80,0.08) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .today-bar-info { flex: 1; }
+  .today-bar-title { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+  .today-bar-date { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 2px; }
+  .today-icon { font-size: 32px; }
+
+  /* Next reminder */
+  .next-reminder {
+    background: rgba(79,195,247,0.06);
+    border: 1px solid rgba(79,195,247,0.2);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .next-reminder-icon { font-size: 28px; }
+  .next-reminder-info { flex: 1; }
+  .next-reminder-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+  .next-reminder-name { font-size: 16px; font-weight: 800; color: var(--text); }
+  .next-reminder-time { font-size: 22px; font-weight: 800; color: var(--accent); direction: ltr; display: inline-block; }
+
+  /* Pulse animation */
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(79,195,247,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(79,195,247,0); }
+  }
+
+  .pulse-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section.active > * {
+    animation: fadeIn 0.3s ease forwards;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="app-wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <span class="app-title">💊 תזכורת תרופות</span>
+      <span class="header-icon" id="headerEmoji">🏥</span>
+    </div>
+    <div class="header-sub" id="headerSub">טוען...</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('home')">
+      <span class="tab-icon">🏠</span>
+      בית
+    </div>
+    <div class="tab" onclick="switchTab('meds')">
+      <span class="tab-icon">💊</span>
+      תרופות
+    </div>
+    <div class="tab" onclick="switchTab('calendar')">
+      <span class="tab-icon">📅</span>
+      לוח שנה
+    </div>
+    <div class="tab" onclick="switchTab('settings')">
+      <span class="tab-icon">⚙️</span>
+      הגדרות
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="section active" id="tab-home">
+    <div class="today-bar">
+      <div class="today-bar-info">
+        <div class="today-bar-title">היום</div>
+        <div class="today-bar-date" id="todayDate">-</div>
+      </div>
+      <div class="today-icon">📆</div>
+    </div>
+
+    <div id="nextReminderBlock" class="next-reminder" style="display:none">
+      <div class="next-reminder-icon">⏰</div>
+      <div class="next-reminder-info">
+        <div class="next-reminder-label">התזכורת הבאה</div>
+        <div class="next-reminder-name" id="nextMedName">-</div>
+        <div class="next-reminder-time" id="nextMedTime">-</div>
+      </div>
+      <div class="pulse-dot"></div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-num" id="statTotal">0</div>
+        <div class="stat-label">תרופות</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num green" id="statMonth">0</div>
+        <div class="stat-label">נלקחו החודש</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num yellow" id="statStreak">0</div>
+        <div class="stat-label">ימים ברצף</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 תרופות להיום</div>
+      <div id="todayMedList">
+        <div class="empty-state">
+          <div class="empty-icon">💊</div>
+          <p>עדיין לא הוגדרו תרופות.<br>עבור ללשונית "תרופות" כדי להוסיף.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="quickTakeCard" style="display:none">
+      <div class="card-title">✅ סמן נטילה להיום</div>
+      <div id="quickTakeList"></div>
+    </div>
+  </div>
+
+  <!-- MEDS -->
+  <div class="section" id="tab-meds">
+    <div class="card">
+      <div class="card-title">➕ הוסף תרופה חדשה</div>
+      <label for="medName">שם התרופה</label>
+      <input type="text" id="medName" placeholder="לדוגמה: אמוקסיצילין" maxlength="40">
+      <label for="medTime">שעת נטילה</label>
+      <input type="time" id="medTime" value="08:00">
+      <button class="btn btn-primary" onclick="addMed()">💊 הוסף תרופה</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 רשימת התרופות שלי</div>
+      <div id="medList">
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <p>אין תרופות עדיין.<br>הוסף תרופה למעלה כדי להתחיל.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="section" id="tab-calendar">
+    <div class="card" style="padding-bottom:14px">
+      <div style="margin-bottom:12px">
+        <div class="card-title" style="margin-bottom:8px">💊 בחר תרופה להצגה</div>
+        <div class="med-selector" id="calMedSelector">
+          <span style="color:var(--text-muted);font-size:13px">הוסף תרופות כדי להציג לוח שנה</span>
+        </div>
+      </div>
+
+      <div class="cal-header">
+        <button class="cal-nav" onclick="prevMonth()">&#x276F;</button>
+        <span class="cal-month" id="calMonthLabel"></span>
+        <button class="cal-nav" onclick="nextMonth()">&#x276E;</button>
+      </div>
+
+      <div class="cal-grid-header" id="calDayNames"></div>
+      <div class="cal-grid" id="calGrid"></div>
+
+      <div class="divider"></div>
+      <div style="display:flex;gap:16px;justify-content:center;font-size:12px;color:var(--text-muted)">
+        <span>🟢 נלקחה</span>
+        <span style="color:var(--accent)">● היום</span>
+        <span>⬜ לא סומן</span>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-num green" id="calStatTaken">0</div>
+        <div class="stat-label">נלקחו החודש</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="calStatDays">0</div>
+        <div class="stat-label">ימים בחודש</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num yellow" id="calStatPct">0%</div>
+        <div class="stat-label">עמידה ביעד</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="section" id="tab-settings">
+    <div class="card">
+      <div class="card-title">🔔 התרעות</div>
+
+      <div class="notif-status default" id="notifStatusBox">
+        <div class="status-dot"></div>
+        <span id="notifStatusText">בדיקת הרשאות...</span>
+      </div>
+
+      <button class="btn btn-notify" id="notifBtn" onclick="requestNotifications()">
+        🔔 אפשר התרעות
+      </button>
+
+      <div style="margin-top:12px;font-size:12px;color:var(--text-muted);line-height:1.7">
+        כדי שהתרעות יפעלו גם כשהדפדפן ברקע, יש לפתוח את האפליקציה פעם ביום, או להוסיף אותה למסך הבית.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📱 הוספה למסך הבית</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.8">
+        <b style="color:var(--text)">iOS (Safari):</b><br>
+        לחץ על 🔗 Share ← "Add to Home Screen"<br><br>
+        <b style="color:var(--text)">Android (Chrome):</b><br>
+        לחץ על ⋮ התפריט ← "Add to Home Screen"
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🗑️ ניהול נתונים</div>
+      <button class="btn btn-danger" onclick="clearAllData()" style="width:100%;margin-top:4px">
+        🗑️ מחק את כל הנתונים
+      </button>
+      <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">
+        פעולה זו תמחק את כל התרופות וסימוני הנטילה באופן בלתי הפיך.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">ℹ️ אודות</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.8">
+        תזכורת תרופות v1.0<br>
+        אפליקציה אישית, ללא שרת.<br>
+        כל הנתונים נשמרים על המכשיר שלך בלבד.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================
+// STATE & STORAGE
+// ============================
+
+const STORAGE_KEYS = {
+  meds: 'meds_v1',
+  taken: 'taken_v1'
+};
+
+function loadMeds() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.meds)) || []; }
+  catch { return []; }
+}
+
+function saveMeds(meds) {
+  localStorage.setItem(STORAGE_KEYS.meds, JSON.stringify(meds));
+}
+
+function loadTaken() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.taken)) || {}; }
+  catch { return {}; }
+}
+
+function saveTaken(taken) {
+  localStorage.setItem(STORAGE_KEYS.taken, JSON.stringify(taken));
+}
+
+// taken structure: { "medId_YYYY-MM-DD": true }
+
+function takenKey(medId, dateStr) {
+  return `${medId}_${dateStr}`;
+}
+
+function isTaken(medId, dateStr) {
+  return !!loadTaken()[takenKey(medId, dateStr)];
+}
+
+function setTaken(medId, dateStr, val) {
+  const t = loadTaken();
+  if (val) t[takenKey(medId, dateStr)] = true;
+  else delete t[takenKey(medId, dateStr)];
+  saveTaken(t);
+}
+
+// ============================
+// HELPERS
+// ============================
+
+function formatDateStr(d) {
+  // YYYY-MM-DD
+  return d.toISOString().split('T')[0];
+}
+
+function todayStr() {
+  return formatDateStr(new Date());
+}
+
+function genId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function hebrewDate(d) {
+  const days = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+  const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+  return `יום ${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function hebrewMonthYear(year, month) {
+  const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+  return `${months[month]} ${year}`;
+}
+
+function showToast(msg, duration = 2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.classList.remove('show'), duration);
+}
+
+// ============================
+// TABS
+// ============================
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((el, i) => {
+    el.classList.remove('active');
+  });
+  document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+
+  const tabs = ['home','meds','calendar','settings'];
+  const idx = tabs.indexOf(name);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+
+  if (name === 'calendar') renderCalendar();
+  if (name === 'home') renderHome();
+  if (name === 'meds') renderMedList();
+}
+
+// ============================
+// HOME
+// ============================
+
+function renderHome() {
+  const now = new Date();
+  document.getElementById('todayDate').textContent = hebrewDate(now);
+
+  const meds = loadMeds();
+  document.getElementById('statTotal').textContent = meds.length;
+
+  // Stats
+  const today = now;
+  const firstOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  let takenCount = 0;
+  let d = new Date(firstOfMonth);
+  while (d <= today) {
+    const ds = formatDateStr(d);
+    meds.forEach(m => { if (isTaken(m.id, ds)) takenCount++; });
+    d.setDate(d.getDate() + 1);
+  }
+  document.getElementById('statMonth').textContent = takenCount;
+
+  // Streak: consecutive days all meds taken (going backwards from yesterday)
+  let streak = 0;
+  let checkD = new Date(today);
+  checkD.setDate(checkD.getDate() - 1);
+  if (meds.length > 0) {
+    for (let i = 0; i < 365; i++) {
+      const ds = formatDateStr(checkD);
+      const allTaken = meds.every(m => isTaken(m.id, ds));
+      if (!allTaken) break;
+      streak++;
+      checkD.setDate(checkD.getDate() - 1);
+    }
+  }
+  document.getElementById('statStreak').textContent = streak;
+
+  // Today's med list
+  const todayList = document.getElementById('todayMedList');
+  const quickList = document.getElementById('quickTakeList');
+  const quickCard = document.getElementById('quickTakeCard');
+
+  if (meds.length === 0) {
+    todayList.innerHTML = `<div class="empty-state"><div class="empty-icon">💊</div><p>עדיין לא הוגדרו תרופות.<br>עבור ללשונית "תרופות" כדי להוסיף.</p></div>`;
+    quickCard.style.display = 'none';
+  } else {
+    const ds = todayStr();
+    todayList.innerHTML = meds.map(m => {
+      const taken = isTaken(m.id, ds);
+      return `<div class="med-item">
+        <span class="med-icon">${taken ? '✅' : '💊'}</span>
+        <div class="med-info">
+          <div class="med-name">${escHtml(m.name)}</div>
+          <div class="med-time">${m.time}</div>
+        </div>
+        <span style="font-size:12px;color:${taken ? 'var(--green)' : 'var(--text-muted)'};font-weight:700">${taken ? 'נלקחה ✓' : 'טרם נלקחה'}</span>
+      </div>`;
+    }).join('');
+
+    // Quick take
+    const notTaken = meds.filter(m => !isTaken(m.id, ds));
+    if (notTaken.length > 0) {
+      quickCard.style.display = 'block';
+      quickList.innerHTML = notTaken.map(m => `
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div>
+            <div style="font-size:15px;font-weight:700">${escHtml(m.name)}</div>
+            <div style="font-size:12px;color:var(--accent);direction:ltr;display:inline-block">${m.time}</div>
+          </div>
+          <button class="btn btn-success" style="width:auto;padding:10px 16px;font-size:13px" onclick="quickTake('${m.id}')">
+            ✅ סמן
+          </button>
+        </div>
+      `).join('');
+    } else {
+      quickCard.style.display = 'none';
+    }
+  }
+
+  // Next reminder
+  updateNextReminder(meds);
+}
+
+function quickTake(medId) {
+  setTaken(medId, todayStr(), true);
+  renderHome();
+  showToast('✅ נטילה סומנה בהצלחה!');
+}
+
+function updateNextReminder(meds) {
+  const block = document.getElementById('nextReminderBlock');
+  if (!meds.length) { block.style.display = 'none'; return; }
+
+  const now = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+
+  let next = null, minDiff = Infinity;
+  meds.forEach(m => {
+    const [h, min] = m.time.split(':').map(Number);
+    const medMins = h * 60 + min;
+    let diff = medMins - nowMins;
+    if (diff <= 0) diff += 1440;
+    if (diff < minDiff) { minDiff = diff; next = m; }
+  });
+
+  if (next) {
+    block.style.display = 'flex';
+    document.getElementById('nextMedName').textContent = next.name;
+    document.getElementById('nextMedTime').textContent = next.time;
+  } else {
+    block.style.display = 'none';
+  }
+}
+
+// ============================
+// MEDICATIONS
+// ============================
+
+function addMed() {
+  const name = document.getElementById('medName').value.trim();
+  const time = document.getElementById('medTime').value;
+  if (!name) { showToast('⚠️ אנא הזן שם תרופה'); return; }
+  if (!time) { showToast('⚠️ אנא בחר שעה'); return; }
+
+  const meds = loadMeds();
+  const med = { id: genId(), name, time };
+  meds.push(med);
+  saveMeds(meds);
+
+  document.getElementById('medName').value = '';
+  document.getElementById('medTime').value = '08:00';
+
+  renderMedList();
+  scheduleNotifications();
+  showToast(`💊 ${name} נוספה בהצלחה!`);
+}
+
+function deleteMed(id) {
+  if (!confirm('האם למחוק תרופה זו?')) return;
+  let meds = loadMeds();
+  meds = meds.filter(m => m.id !== id);
+  saveMeds(meds);
+  renderMedList();
+  scheduleNotifications();
+  showToast('🗑️ התרופה נמחקה');
+}
+
+function renderMedList() {
+  const meds = loadMeds();
+  const el = document.getElementById('medList');
+  if (!meds.length) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>אין תרופות עדיין.<br>הוסף תרופה למעלה כדי להתחיל.</p></div>`;
+    return;
+  }
+  const sorted = [...meds].sort((a, b) => a.time.localeCompare(b.time));
+  el.innerHTML = sorted.map(m => `
+    <div class="med-item">
+      <span class="med-icon">💊</span>
+      <div class="med-info">
+        <div class="med-name">${escHtml(m.name)}</div>
+        <div class="med-time">${m.time}</div>
+      </div>
+      <button class="btn btn-danger" onclick="deleteMed('${m.id}')">🗑️ מחק</button>
+    </div>
+  `).join('');
+}
+
+// ============================
+// CALENDAR
+// ============================
+
+let calYear, calMonth, selectedMedId = null;
+
+function initCalendar() {
+  const now = new Date();
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+}
+
+function prevMonth() {
+  calMonth--;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  renderCalendar();
+}
+
+function nextMonth() {
+  calMonth++;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const meds = loadMeds();
+
+  // Selector chips
+  const selector = document.getElementById('calMedSelector');
+  if (!meds.length) {
+    selector.innerHTML = '<span style="color:var(--text-muted);font-size:13px">הוסף תרופות כדי להציג לוח שנה</span>';
+    document.getElementById('calGrid').innerHTML = '';
+    document.getElementById('calDayNames').innerHTML = '';
+    document.getElementById('calMonthLabel').textContent = '';
+    return;
+  }
+
+  if (!selectedMedId || !meds.find(m => m.id === selectedMedId)) {
+    selectedMedId = meds[0].id;
+  }
+
+  selector.innerHTML = meds.map(m => `
+    <button class="med-chip ${m.id === selectedMedId ? 'active' : ''}"
+      onclick="selectCalMed('${m.id}')">${escHtml(m.name)}</button>
+  `).join('');
+
+  // Calendar grid
+  document.getElementById('calMonthLabel').textContent = hebrewMonthYear(calYear, calMonth);
+
+  const dayNames = ['א','ב','ג','ד','ה','ו','ש'];
+  document.getElementById('calDayNames').innerHTML = dayNames.map(d =>
+    `<div class="cal-day-name">${d}</div>`).join('');
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay(); // 0=Sun
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const today = new Date();
+  const todayDs = formatDateStr(today);
+
+  let html = '';
+  // Empty cells before first day
+  for (let i = 0; i < firstDay; i++) {
+    html += `<div class="cal-day empty"></div>`;
+  }
+
+  let takenCount = 0;
+  let pastDays = 0;
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const d = new Date(calYear, calMonth, day);
+    const ds = formatDateStr(d);
+    const isToday = ds === todayDs;
+    const isFuture = d > today && !isToday;
+    const isPast = d < today;
+    const taken = isTaken(selectedMedId, ds);
+
+    if (taken) takenCount++;
+    if (isPast || isToday) pastDays++;
+
+    let cls = 'cal-day';
+    if (taken) cls += ' taken';
+    else if (isToday) cls += ' today';
+    else if (isFuture) cls += ' future';
+    else cls += ' past';
+
+    const clickable = !isFuture;
+    html += `<div class="${cls}" ${clickable ? `onclick="toggleDay('${ds}')"` : ''}>${day}</div>`;
+  }
+
+  document.getElementById('calGrid').innerHTML = html;
+
+  // Stats
+  document.getElementById('calStatTaken').textContent = takenCount;
+  document.getElementById('calStatDays').textContent = pastDays;
+  const pct = pastDays > 0 ? Math.round(takenCount / pastDays * 100) : 0;
+  document.getElementById('calStatPct').textContent = pct + '%';
+}
+
+function selectCalMed(id) {
+  selectedMedId = id;
+  renderCalendar();
+}
+
+function toggleDay(ds) {
+  if (!selectedMedId) return;
+  const current = isTaken(selectedMedId, ds);
+  setTaken(selectedMedId, ds, !current);
+  renderCalendar();
+  showToast(current ? '❌ סימון הוסר' : '✅ נטילה סומנה!');
+}
+
+// ============================
+// NOTIFICATIONS
+// ============================
+
+function updateNotifStatus() {
+  const box = document.getElementById('notifStatusBox');
+  const text = document.getElementById('notifStatusText');
+  const btn = document.getElementById('notifBtn');
+
+  if (!('Notification' in window)) {
+    box.className = 'notif-status denied';
+    text.textContent = 'הדפדפן אינו תומך בהתרעות';
+    btn.style.display = 'none';
+    return;
+  }
+
+  const perm = Notification.permission;
+  if (perm === 'granted') {
+    box.className = 'notif-status granted';
+    text.textContent = 'התרעות מופעלות ✓';
+    btn.style.display = 'none';
+  } else if (perm === 'denied') {
+    box.className = 'notif-status denied';
+    text.textContent = 'התרעות חסומות — יש לאפשר בהגדרות הדפדפן';
+    btn.textContent = '⚙️ פתח הגדרות דפדפן';
+    btn.onclick = () => showToast('פתח הגדרות ← Privacy ← Notifications');
+  } else {
+    box.className = 'notif-status default';
+    text.textContent = 'נדרשת הרשאה לשליחת התרעות';
+    btn.style.display = 'block';
+    btn.onclick = requestNotifications;
+  }
+}
+
+async function requestNotifications() {
+  if (!('Notification' in window)) {
+    showToast('הדפדפן אינו תומך בהתרעות');
+    return;
+  }
+  const perm = await Notification.requestPermission();
+  updateNotifStatus();
+  if (perm === 'granted') {
+    showToast('✅ התרעות הופעלו בהצלחה!');
+    scheduleNotifications();
+  } else {
+    showToast('❌ ההרשאה נדחתה');
+  }
+}
+
+function scheduleNotifications() {
+  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+
+  // Clear existing timers
+  if (window._notifTimers) window._notifTimers.forEach(clearTimeout);
+  window._notifTimers = [];
+
+  const meds = loadMeds();
+  const now = new Date();
+
+  meds.forEach(med => {
+    const [h, min] = med.time.split(':').map(Number);
+    const target = new Date();
+    target.setHours(h, min, 0, 0);
+
+    let diff = target - now;
+    if (diff < 0) diff += 24 * 60 * 60 * 1000; // next day
+
+    if (diff < 24 * 60 * 60 * 1000) {
+      const timer = setTimeout(() => {
+        sendNotification(med);
+        // Reschedule for next day
+        setTimeout(() => scheduleNotifications(), 2000);
+      }, diff);
+      window._notifTimers.push(timer);
+    }
+  });
+}
+
+function sendNotification(med) {
+  if (Notification.permission !== 'granted') return;
+  const n = new Notification('💊 תזכורת תרופות', {
+    body: `הגיע הזמן לקחת: ${med.name} (${med.time})`,
+    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">💊</text></svg>',
+    tag: med.id,
+    requireInteraction: true
+  });
+  n.onclick = () => { window.focus(); n.close(); };
+}
+
+// ============================
+// DATA MANAGEMENT
+// ============================
+
+function clearAllData() {
+  if (!confirm('האם אתה בטוח? כל הנתונים יימחקו.')) return;
+  localStorage.removeItem(STORAGE_KEYS.meds);
+  localStorage.removeItem(STORAGE_KEYS.taken);
+  selectedMedId = null;
+  renderMedList();
+  renderHome();
+  showToast('🗑️ כל הנתונים נמחקו');
+}
+
+// ============================
+// UTILS
+// ============================
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============================
+// INIT
+// ============================
+
+function init() {
+  initCalendar();
+  renderHome();
+  renderMedList();
+  updateNotifStatus();
+  scheduleNotifications();
+
+  // Update header
+  const now = new Date();
+  const hours = now.getHours();
+  let emoji = '🌙', greeting = 'לילה טוב';
+  if (hours >= 5 && hours < 12) { emoji = '🌅'; greeting = 'בוקר טוב'; }
+  else if (hours >= 12 && hours < 17) { emoji = '☀️'; greeting = 'צהריים טובים'; }
+  else if (hours >= 17 && hours < 21) { emoji = '🌆'; greeting = 'ערב טוב'; }
+  document.getElementById('headerEmoji').textContent = emoji;
+  document.getElementById('headerSub').textContent = greeting + ' — אל תשכח את התרופות שלך';
+
+  // Re-check every minute (for notifications & home update)
+  setInterval(() => {
+    scheduleNotifications();
+    if (document.getElementById('tab-home').classList.contains('active')) renderHome();
+  }, 60000);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
