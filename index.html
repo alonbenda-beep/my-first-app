@@ -978,28 +978,31 @@ function sendTestNotification() {
     showToast('⚠️ יש לאשר התרעות תחילה');
     return;
   }
-  // Use SW for test — so it works even in background
-  if (swReg && swReg.active) {
-    swReg.active.postMessage({
-      type: 'SCHEDULE',
-      meds: [{ id: 'test-' + Date.now(), name: 'בדיקה — התרעה פועלת ✓', time: getTimeInSeconds(5) }]
-    });
-    showToast('🧪 התרעת בדיקה תגיע תוך ~5 שניות...', 4000);
-    // restore real schedule after 10s
-    setTimeout(() => syncWithSW(), 10000);
-  } else {
-    // Fallback: direct notification
-    new Notification('🧪 התרעת בדיקה', {
-      body: 'אם אתה רואה זאת — התרעות פועלות!',
-      icon: buildIconDataUrl(),
-      requireInteraction: true
-    });
-  }
+
+  const testMed = { id: 'test-' + Date.now(), name: 'בדיקה — התרעות פועלות! 🎉', time: '00:00' };
+
+  // נסה דרך SW (מיידי, ללא תזמון)
+  navigator.serviceWorker.ready.then(reg => {
+    if (reg.active) {
+      reg.active.postMessage({ type: 'FIRE_NOW', med: testMed });
+      showToast('🧪 התרעת בדיקה נשלחה — בדוק את שורת ההתראות', 4000);
+    } else {
+      fallbackNotification(testMed.name);
+    }
+  }).catch(() => fallbackNotification(testMed.name));
 }
 
-function getTimeInSeconds(sec) {
-  const d = new Date(Date.now() + sec * 1000);
-  return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+function fallbackNotification(name) {
+  // Fallback ישיר אם ה-SW לא זמין
+  try {
+    new Notification('🧪 התרעת בדיקה', {
+      body: name,
+      requireInteraction: true,
+      dir: 'rtl'
+    });
+  } catch(e) {
+    showToast('❌ שגיאה בשליחת התרעה: ' + e.message);
+  }
 }
 
 function buildIconDataUrl() {

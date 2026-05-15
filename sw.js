@@ -40,6 +40,10 @@ self.addEventListener('message', e => {
   if (e.data && e.data.type === 'PING') {
     e.source.postMessage({ type: 'PONG' });
   }
+  if (e.data && e.data.type === 'FIRE_NOW') {
+    // הפעל notification מיידית — לבדיקה
+    fireNotification(e.data.med);
+  }
 });
 
 // ── לוגיקת תזמון ────────────────────────────
