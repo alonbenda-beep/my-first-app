@@ -549,7 +549,7 @@
     <div class="card">
       <div class="card-title">ℹ️ אודות</div>
       <div style="font-size:13px;color:var(--text-muted);line-height:1.8">
-        תזכורת תרופות v2.0 עם Service Worker<br>
+        תזכורת תרופות v3.0 עם Service Worker<br>
         כל הנתונים נשמרים על המכשיר שלך בלבד.
       </div>
     </div>
@@ -870,6 +870,10 @@ async function registerSW() {
       showSwBanner('✅ Service Worker פעיל — התרעות ברקע מופעלות', 'ok');
       syncWithSW();
     }
+
+    // Periodic sync (Android Chrome תומך בזה)
+    await registerPeriodicSync(swReg);
+
   } catch (err) {
     console.error('[SW] Registration failed:', err);
     showSwBanner('❌ שגיאה ב-Service Worker: ' + err.message, 'warn');
@@ -905,14 +909,34 @@ function updateSwStatus() {
   });
 }
 
-// Send meds to SW for scheduling
+// שלח תרופות ל-SW לשמירה + בדיקה מיידית
 function syncWithSW() {
   if (!('serviceWorker' in navigator)) return;
   navigator.serviceWorker.ready.then(reg => {
     if (reg.active) {
-      reg.active.postMessage({ type: 'SCHEDULE', meds: loadMeds() });
+      reg.active.postMessage({ type: 'SYNC_MEDS', meds: loadMeds() });
     }
   }).catch(() => {});
+}
+
+// רישום Periodic Background Sync
+async function registerPeriodicSync(reg) {
+  try {
+    const status = await navigator.permissions.query({ name: 'periodic-background-sync' });
+    if (status.state === 'granted') {
+      await reg.periodicSync.register('med-check', { minInterval: 15 * 60 * 1000 });
+      console.log('[SW] Periodic sync registered');
+    }
+  } catch(e) {
+    console.log('[SW] Periodic sync not supported:', e.message);
+  }
+}
+
+// בדיקה כשהמשתמש חוזר לאפליקציה
+function checkOnVisible() {
+  if (document.visibilityState === 'visible') {
+    syncWithSW();
+  }
 }
 
 // Handle messages from SW (e.g. AUTO_TAKEN when user clicks notification)
@@ -1046,9 +1070,13 @@ function init() {
   document.getElementById('headerEmoji').textContent = emoji;
   document.getElementById('headerSub').textContent = greeting + ' — אל תשכח את התרופות שלך';
 
+  // עדכון כל דקה
   setInterval(() => {
     if (document.getElementById('tab-home').classList.contains('active')) renderHome();
   }, 60000);
+
+  // בדיקת שעה בכל פעם שהמשתמש חוזר לאפליקציה (מהרקע)
+  document.addEventListener('visibilitychange', checkOnVisible);
 }
 
 document.addEventListener('DOMContentLoaded', init);
