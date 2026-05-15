@@ -37,7 +37,6 @@
     overflow-x: hidden;
   }
 
-  /* Animated background */
   body::before {
     content: '';
     position: fixed;
@@ -67,30 +66,27 @@
     z-index: 100;
     backdrop-filter: blur(12px);
   }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .app-title { font-size: 22px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
+  .header-icon { font-size: 26px; filter: drop-shadow(0 0 8px rgba(79,195,247,0.5)); }
+  .header-sub { font-size: 13px; color: var(--text-muted); font-weight: 400; }
 
-  .header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 4px;
+  /* SW Status banner */
+  .sw-banner {
+    display: none;
+    background: rgba(76,175,80,0.12);
+    border-bottom: 1px solid rgba(76,175,80,0.25);
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--green-light);
+    text-align: center;
+    font-weight: 600;
   }
-
-  .app-title {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--accent);
-    letter-spacing: -0.5px;
-  }
-
-  .header-icon {
-    font-size: 26px;
-    filter: drop-shadow(0 0 8px rgba(79,195,247,0.5));
-  }
-
-  .header-sub {
-    font-size: 13px;
-    color: var(--text-muted);
-    font-weight: 400;
+  .sw-banner.show { display: block; }
+  .sw-banner.warn {
+    background: rgba(255,183,77,0.1);
+    border-bottom-color: rgba(255,183,77,0.25);
+    color: #ffcc80;
   }
 
   /* Tabs */
@@ -102,7 +98,6 @@
     top: 77px;
     z-index: 99;
   }
-
   .tab {
     flex: 1;
     padding: 14px 10px;
@@ -115,20 +110,11 @@
     transition: all 0.2s;
     user-select: none;
   }
-
-  .tab.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-  }
-
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
   .tab-icon { font-size: 18px; display: block; margin-bottom: 2px; }
 
   /* Sections */
-  .section {
-    padding: 20px 16px;
-    display: none;
-  }
-
+  .section { padding: 20px 16px; display: none; }
   .section.active { display: block; }
 
   /* Cards */
@@ -139,11 +125,7 @@
     padding: 20px;
     margin-bottom: 14px;
     box-shadow: var(--shadow);
-    transition: transform 0.15s;
   }
-
-  .card:active { transform: scale(0.99); }
-
   .card-title {
     font-size: 15px;
     font-weight: 700;
@@ -154,17 +136,9 @@
     gap: 8px;
   }
 
-  /* Form elements */
-  label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-  }
-
-  input[type="text"],
-  input[type="time"] {
+  /* Form */
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+  input[type="text"], input[type="time"] {
     width: 100%;
     padding: 13px 15px;
     border-radius: var(--radius-sm);
@@ -178,386 +152,135 @@
     margin-bottom: 14px;
     direction: rtl;
   }
-
-  input[type="text"]:focus,
-  input[type="time"]:focus {
+  input[type="text"]:focus, input[type="time"]:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(79,195,247,0.15);
   }
-
   input[type="time"] {
-    direction: ltr;
-    text-align: center;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    padding: 10px;
+    direction: ltr; text-align: center; font-size: 22px; font-weight: 700;
+    letter-spacing: 2px; padding: 10px;
   }
 
   /* Buttons */
   .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 14px 20px;
-    border-radius: var(--radius-sm);
-    border: none;
-    font-family: 'Assistant', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    width: 100%;
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 8px; padding: 14px 20px; border-radius: var(--radius-sm);
+    border: none; font-family: 'Assistant', sans-serif; font-size: 15px;
+    font-weight: 700; cursor: pointer; transition: all 0.2s; width: 100%;
     user-select: none;
   }
-
   .btn:active { transform: scale(0.97); }
-
-  .btn-primary {
-    background: linear-gradient(135deg, var(--accent) 0%, #0288d1 100%);
-    color: #0d1b2a;
-  }
-
+  .btn-primary { background: linear-gradient(135deg, var(--accent) 0%, #0288d1 100%); color: #0d1b2a; }
   .btn-primary:hover { filter: brightness(1.08); }
-
-  .btn-success {
-    background: linear-gradient(135deg, var(--green) 0%, #2e7d32 100%);
-    color: #fff;
-  }
-
-  .btn-danger {
-    background: rgba(239,83,80,0.15);
-    color: var(--red);
-    border: 1px solid rgba(239,83,80,0.3);
-    padding: 9px 14px;
-    font-size: 13px;
-    width: auto;
-    border-radius: 8px;
-  }
-
-  .btn-notify {
-    background: linear-gradient(135deg, #7c4dff 0%, #512da8 100%);
-    color: #fff;
-    font-size: 14px;
-    padding: 13px;
-  }
+  .btn-success { background: linear-gradient(135deg, var(--green) 0%, #2e7d32 100%); color: #fff; }
+  .btn-danger { background: rgba(239,83,80,0.15); color: var(--red); border: 1px solid rgba(239,83,80,0.3); padding: 9px 14px; font-size: 13px; width: auto; border-radius: 8px; }
+  .btn-notify { background: linear-gradient(135deg, #7c4dff 0%, #512da8 100%); color: #fff; font-size: 14px; padding: 13px; }
+  .btn-test { background: rgba(79,195,247,0.1); color: var(--accent); border: 1px solid var(--border); font-size: 13px; padding: 10px; margin-top: 10px; }
 
   /* Notification status */
   .notif-status {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 15px;
-    border-radius: var(--radius-sm);
-    margin-bottom: 14px;
-    font-size: 13px;
-    font-weight: 600;
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 15px; border-radius: var(--radius-sm);
+    margin-bottom: 14px; font-size: 13px; font-weight: 600;
   }
-
-  .notif-status.granted {
-    background: rgba(76,175,80,0.12);
-    border: 1px solid rgba(76,175,80,0.3);
-    color: var(--green-light);
-  }
-
-  .notif-status.denied {
-    background: rgba(239,83,80,0.12);
-    border: 1px solid rgba(239,83,80,0.3);
-    color: #ef9a9a;
-  }
-
-  .notif-status.default {
-    background: rgba(79,195,247,0.08);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-  }
-
-  .status-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
+  .notif-status.granted { background: rgba(76,175,80,0.12); border: 1px solid rgba(76,175,80,0.3); color: var(--green-light); }
+  .notif-status.denied { background: rgba(239,83,80,0.12); border: 1px solid rgba(239,83,80,0.3); color: #ef9a9a; }
+  .notif-status.default { background: rgba(79,195,247,0.08); border: 1px solid var(--border); color: var(--text-muted); }
+  .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .granted .status-dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
   .denied .status-dot { background: var(--red); }
   .default .status-dot { background: var(--text-muted); }
 
-  /* Medication list */
-  .med-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 16px;
-    background: rgba(255,255,255,0.03);
+  /* SW status card */
+  .sw-status-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 15px; border-radius: var(--radius-sm);
+    margin-bottom: 14px; font-size: 13px; font-weight: 600;
+    background: rgba(79,195,247,0.06);
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    margin-bottom: 10px;
-    transition: background 0.15s;
   }
+  .sw-status-row.ok { background: rgba(76,175,80,0.1); border-color: rgba(76,175,80,0.3); color: var(--green-light); }
+  .sw-status-row.err { background: rgba(239,83,80,0.1); border-color: rgba(239,83,80,0.3); color: #ef9a9a; }
 
+  /* Med items */
+  .med-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    margin-bottom: 10px; transition: background 0.15s;
+  }
   .med-info { flex: 1; }
-
-  .med-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .med-time {
-    font-size: 13px;
-    color: var(--accent);
-    font-weight: 600;
-    margin-top: 3px;
-    direction: ltr;
-    display: inline-block;
-  }
-
+  .med-name { font-size: 16px; font-weight: 700; color: var(--text); }
+  .med-time { font-size: 13px; color: var(--accent); font-weight: 600; margin-top: 3px; direction: ltr; display: inline-block; }
   .med-icon { font-size: 24px; margin-left: 12px; }
-
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-muted);
-  }
-
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
   .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
   .empty-state p { font-size: 14px; line-height: 1.6; }
 
   /* Calendar */
-  .cal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-
-  .cal-month {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--text);
-  }
-
+  .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .cal-month { font-size: 18px; font-weight: 800; color: var(--text); }
   .cal-nav {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--accent);
-    border-radius: 8px;
-    width: 36px; height: 36px;
+    background: var(--surface2); border: 1px solid var(--border); color: var(--accent);
+    border-radius: 8px; width: 36px; height: 36px;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: 700;
-    transition: background 0.15s;
-    user-select: none;
+    cursor: pointer; font-size: 18px; font-weight: 700; transition: background 0.15s; user-select: none;
   }
-
   .cal-nav:active { background: var(--accent); color: #0d1b2a; }
-
-  .cal-grid-header {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    margin-bottom: 6px;
-  }
-
-  .cal-day-name {
-    text-align: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-muted);
-    padding: 4px 0;
-  }
-
-  .cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-  }
-
+  .cal-grid-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; }
+  .cal-day-name { text-align: center; font-size: 11px; font-weight: 700; color: var(--text-muted); padding: 4px 0; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
   .cal-day {
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1.5px solid transparent;
-    transition: all 0.15s;
-    position: relative;
-    user-select: none;
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer;
+    border: 1.5px solid transparent; transition: all 0.15s; position: relative; user-select: none;
   }
-
   .cal-day.empty { background: transparent; cursor: default; }
-
-  .cal-day.future {
-    color: rgba(255,255,255,0.2);
-    cursor: not-allowed;
-  }
-
-  .cal-day.past, .cal-day.today {
-    background: rgba(255,255,255,0.04);
-    color: var(--text);
-    border-color: var(--border);
-  }
-
-  .cal-day.past:active, .cal-day.today:active {
-    transform: scale(0.92);
-  }
-
-  .cal-day.today {
-    border-color: var(--accent);
-    color: var(--accent);
-    font-weight: 800;
-  }
-
-  .cal-day.today::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    background: var(--accent);
-  }
-
-  .cal-day.taken {
-    background: linear-gradient(135deg, var(--green) 0%, #2e7d32 100%);
-    color: #fff;
-    border-color: var(--green);
-    font-weight: 800;
-  }
-
-  .cal-day.taken::before {
-    content: '✓';
-    position: absolute;
-    top: 2px;
-    left: 4px;
-    font-size: 9px;
-    opacity: 0.8;
-  }
+  .cal-day.future { color: rgba(255,255,255,0.2); cursor: not-allowed; }
+  .cal-day.past, .cal-day.today { background: rgba(255,255,255,0.04); color: var(--text); border-color: var(--border); }
+  .cal-day.past:active, .cal-day.today:active { transform: scale(0.92); }
+  .cal-day.today { border-color: var(--accent); color: var(--accent); font-weight: 800; }
+  .cal-day.today::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+  .cal-day.taken { background: linear-gradient(135deg, var(--green) 0%, #2e7d32 100%); color: #fff; border-color: var(--green); font-weight: 800; }
+  .cal-day.taken::before { content: '✓'; position: absolute; top: 2px; left: 4px; font-size: 9px; opacity: 0.8; }
 
   /* Stats */
-  .stats-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-
-  .stat-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 10px;
-    text-align: center;
-  }
-
-  .stat-num {
-    font-size: 26px;
-    font-weight: 800;
-    color: var(--accent);
-    line-height: 1;
-  }
-
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 10px; text-align: center; }
+  .stat-num { font-size: 26px; font-weight: 800; color: var(--accent); line-height: 1; }
   .stat-num.green { color: var(--green); }
   .stat-num.yellow { color: #ffb74d; }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-weight: 600; }
 
-  .stat-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 4px;
-    font-weight: 600;
-  }
-
-  /* Med selector for calendar */
-  .med-selector {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-
+  /* Med selector */
+  .med-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
   .med-chip {
-    padding: 7px 14px;
-    border-radius: 20px;
-    border: 1.5px solid var(--border);
-    background: rgba(255,255,255,0.03);
-    color: var(--text-muted);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: 'Assistant', sans-serif;
-    user-select: none;
+    padding: 7px 14px; border-radius: 20px; border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.03); color: var(--text-muted);
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+    font-family: 'Assistant', sans-serif; user-select: none;
   }
-
-  .med-chip.active {
-    border-color: var(--accent);
-    background: rgba(79,195,247,0.12);
-    color: var(--accent);
-  }
+  .med-chip.active { border-color: var(--accent); background: rgba(79,195,247,0.12); color: var(--accent); }
 
   /* Toast */
   .toast {
-    position: fixed;
-    bottom: 90px;
-    left: 50%;
+    position: fixed; bottom: 90px; left: 50%;
     transform: translateX(-50%) translateY(20px);
-    background: #1e3a5f;
-    border: 1px solid var(--accent);
-    color: var(--text);
-    padding: 13px 20px;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-    z-index: 9999;
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    white-space: nowrap;
-    max-width: 90vw;
-    text-align: center;
+    background: #1e3a5f; border: 1px solid var(--accent);
+    color: var(--text); padding: 13px 20px; border-radius: 12px;
+    font-size: 14px; font-weight: 600; box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    z-index: 9999; opacity: 0; transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap; max-width: 90vw; text-align: center;
   }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  /* Bottom nav */
-  .bottom-nav {
-    display: none; /* using tabs instead */
-  }
-
-  /* Section titles */
-  .section-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--text);
-    margin-bottom: 16px;
-  }
-
-  /* Divider */
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 16px 0;
-  }
-
-  /* Today's summary bar */
+  /* Today bar */
   .today-bar {
     background: linear-gradient(135deg, rgba(79,195,247,0.12) 0%, rgba(76,175,80,0.08) 100%);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 20px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px 20px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between;
   }
-
   .today-bar-info { flex: 1; }
   .today-bar-title { font-size: 13px; color: var(--text-muted); font-weight: 600; }
   .today-bar-date { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 2px; }
@@ -565,49 +288,57 @@
 
   /* Next reminder */
   .next-reminder {
-    background: rgba(79,195,247,0.06);
-    border: 1px solid rgba(79,195,247,0.2);
-    border-radius: var(--radius);
-    padding: 14px 18px;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    background: rgba(79,195,247,0.06); border: 1px solid rgba(79,195,247,0.2);
+    border-radius: var(--radius); padding: 14px 18px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 14px;
   }
-
   .next-reminder-icon { font-size: 28px; }
   .next-reminder-info { flex: 1; }
   .next-reminder-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
   .next-reminder-name { font-size: 16px; font-weight: 800; color: var(--text); }
   .next-reminder-time { font-size: 22px; font-weight: 800; color: var(--accent); direction: ltr; display: inline-block; }
 
-  /* Pulse animation */
   @keyframes pulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(79,195,247,0.4); }
     50% { box-shadow: 0 0 0 8px rgba(79,195,247,0); }
   }
+  .pulse-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; flex-shrink: 0; }
 
-  .pulse-dot {
-    width: 12px; height: 12px;
-    border-radius: 50%;
-    background: var(--accent);
-    animation: pulse 2s infinite;
-    flex-shrink: 0;
-  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .section.active > * { animation: fadeIn 0.3s ease forwards; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
 
-  .section.active > * {
-    animation: fadeIn 0.3s ease forwards;
-  }
-
-  /* Scrollbar */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* Steps list */
+  .steps { list-style: none; counter-reset: steps; }
+  .steps li {
+    counter-increment: steps;
+    padding: 10px 0 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .steps li:last-child { border-bottom: none; }
+  .steps li::before {
+    content: counter(steps);
+    background: var(--accent);
+    color: #0d1b2a;
+    border-radius: 50%;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .steps li b { color: var(--text); }
 </style>
 </head>
 <body>
@@ -623,23 +354,22 @@
     <div class="header-sub" id="headerSub">טוען...</div>
   </div>
 
+  <!-- SW Banner -->
+  <div class="sw-banner" id="swBanner"></div>
+
   <!-- Tabs -->
   <div class="tabs">
     <div class="tab active" onclick="switchTab('home')">
-      <span class="tab-icon">🏠</span>
-      בית
+      <span class="tab-icon">🏠</span>בית
     </div>
     <div class="tab" onclick="switchTab('meds')">
-      <span class="tab-icon">💊</span>
-      תרופות
+      <span class="tab-icon">💊</span>תרופות
     </div>
     <div class="tab" onclick="switchTab('calendar')">
-      <span class="tab-icon">📅</span>
-      לוח שנה
+      <span class="tab-icon">📅</span>לוח שנה
     </div>
     <div class="tab" onclick="switchTab('settings')">
-      <span class="tab-icon">⚙️</span>
-      הגדרות
+      <span class="tab-icon">⚙️</span>הגדרות
     </div>
   </div>
 
@@ -725,16 +455,13 @@
           <span style="color:var(--text-muted);font-size:13px">הוסף תרופות כדי להציג לוח שנה</span>
         </div>
       </div>
-
       <div class="cal-header">
         <button class="cal-nav" onclick="prevMonth()">&#x276F;</button>
         <span class="cal-month" id="calMonthLabel"></span>
         <button class="cal-nav" onclick="nextMonth()">&#x276E;</button>
       </div>
-
       <div class="cal-grid-header" id="calDayNames"></div>
       <div class="cal-grid" id="calGrid"></div>
-
       <div class="divider"></div>
       <div style="display:flex;gap:16px;justify-content:center;font-size:12px;color:var(--text-muted)">
         <span>🟢 נלקחה</span>
@@ -742,7 +469,6 @@
         <span>⬜ לא סומן</span>
       </div>
     </div>
-
     <div class="stats-row">
       <div class="stat-box">
         <div class="stat-num green" id="calStatTaken">0</div>
@@ -761,33 +487,55 @@
 
   <!-- SETTINGS -->
   <div class="section" id="tab-settings">
-    <div class="card">
-      <div class="card-title">🔔 התרעות</div>
 
+    <!-- Notification Permission -->
+    <div class="card">
+      <div class="card-title">🔔 הרשאת התרעות</div>
       <div class="notif-status default" id="notifStatusBox">
         <div class="status-dot"></div>
         <span id="notifStatusText">בדיקת הרשאות...</span>
       </div>
-
       <button class="btn btn-notify" id="notifBtn" onclick="requestNotifications()">
         🔔 אפשר התרעות
       </button>
-
-      <div style="margin-top:12px;font-size:12px;color:var(--text-muted);line-height:1.7">
-        כדי שהתרעות יפעלו גם כשהדפדפן ברקע, יש לפתוח את האפליקציה פעם ביום, או להוסיף אותה למסך הבית.
-      </div>
+      <button class="btn btn-test" id="testBtn" onclick="sendTestNotification()" style="display:none">
+        🧪 שלח התרעת בדיקה עכשיו
+      </button>
     </div>
 
+    <!-- Service Worker Status -->
     <div class="card">
-      <div class="card-title">📱 הוספה למסך הבית</div>
-      <div style="font-size:13px;color:var(--text-muted);line-height:1.8">
-        <b style="color:var(--text)">iOS (Safari):</b><br>
-        לחץ על 🔗 Share ← "Add to Home Screen"<br><br>
-        <b style="color:var(--text)">Android (Chrome):</b><br>
-        לחץ על ⋮ התפריט ← "Add to Home Screen"
+      <div class="card-title">⚙️ מצב Service Worker (רקע)</div>
+      <div class="sw-status-row" id="swStatusRow">
+        <div class="status-dot" style="background:var(--text-muted)"></div>
+        <span id="swStatusText">בודק...</span>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.8">
+        ה-Service Worker הוא מה שמאפשר לשלוח התרעות גם כשהאפליקציה סגורה. הוא חייב להיות פעיל.
       </div>
     </div>
 
+    <!-- iOS special note -->
+    <div class="card" id="iosNote" style="display:none">
+      <div class="card-title">🍎 הערה חשובה ל-iOS</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.8">
+        ב-iPhone/iPad — התרעות פועלות <b style="color:var(--text)">רק</b> אם הוספת את האפליקציה <b style="color:var(--accent)">למסך הבית</b> דרך Safari.<br><br>
+        <b style="color:var(--text)">כיצד:</b> Safari ← כפתור Share 🔗 ← "Add to Home Screen" ← פתח מהאייקון החדש
+      </div>
+    </div>
+
+    <!-- Add to Home -->
+    <div class="card">
+      <div class="card-title">📱 הוסף למסך הבית</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.8">
+        <b style="color:var(--text)">iOS Safari:</b><br>
+        Share 🔗 ← "Add to Home Screen"<br><br>
+        <b style="color:var(--text)">Android Chrome:</b><br>
+        ⋮ תפריט ← "Add to Home Screen"
+      </div>
+    </div>
+
+    <!-- Debug / Data -->
     <div class="card">
       <div class="card-title">🗑️ ניהול נתונים</div>
       <button class="btn btn-danger" onclick="clearAllData()" style="width:100%;margin-top:4px">
@@ -801,8 +549,7 @@
     <div class="card">
       <div class="card-title">ℹ️ אודות</div>
       <div style="font-size:13px;color:var(--text-muted);line-height:1.8">
-        תזכורת תרופות v1.0<br>
-        אפליקציה אישית, ללא שרת.<br>
+        תזכורת תרופות v2.0 עם Service Worker<br>
         כל הנתונים נשמרים על המכשיר שלך בלבד.
       </div>
     </div>
@@ -814,79 +561,50 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ============================
-// STATE & STORAGE
-// ============================
-
-const STORAGE_KEYS = {
-  meds: 'meds_v1',
-  taken: 'taken_v1'
-};
+// ============================================================
+// STORAGE
+// ============================================================
+const STORAGE_KEYS = { meds: 'meds_v1', taken: 'taken_v1' };
 
 function loadMeds() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.meds)) || []; }
-  catch { return []; }
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.meds)) || []; } catch { return []; }
 }
-
-function saveMeds(meds) {
-  localStorage.setItem(STORAGE_KEYS.meds, JSON.stringify(meds));
-}
-
+function saveMeds(meds) { localStorage.setItem(STORAGE_KEYS.meds, JSON.stringify(meds)); }
 function loadTaken() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.taken)) || {}; }
-  catch { return {}; }
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.taken)) || {}; } catch { return {}; }
 }
-
-function saveTaken(taken) {
-  localStorage.setItem(STORAGE_KEYS.taken, JSON.stringify(taken));
-}
-
-// taken structure: { "medId_YYYY-MM-DD": true }
-
-function takenKey(medId, dateStr) {
-  return `${medId}_${dateStr}`;
-}
-
-function isTaken(medId, dateStr) {
-  return !!loadTaken()[takenKey(medId, dateStr)];
-}
-
-function setTaken(medId, dateStr, val) {
+function saveTaken(taken) { localStorage.setItem(STORAGE_KEYS.taken, JSON.stringify(taken)); }
+function takenKey(medId, ds) { return `${medId}_${ds}`; }
+function isTaken(medId, ds) { return !!loadTaken()[takenKey(medId, ds)]; }
+function setTaken(medId, ds, val) {
   const t = loadTaken();
-  if (val) t[takenKey(medId, dateStr)] = true;
-  else delete t[takenKey(medId, dateStr)];
+  if (val) t[takenKey(medId, ds)] = true; else delete t[takenKey(medId, ds)];
   saveTaken(t);
 }
 
-// ============================
+// ============================================================
 // HELPERS
-// ============================
-
+// ============================================================
 function formatDateStr(d) {
-  // YYYY-MM-DD
-  return d.toISOString().split('T')[0];
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
 }
-
-function todayStr() {
-  return formatDateStr(new Date());
-}
-
-function genId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-}
+function todayStr() { return formatDateStr(new Date()); }
+function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
 
 function hebrewDate(d) {
   const days = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
   const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
   return `יום ${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
-
-function hebrewMonthYear(year, month) {
+function hebrewMonthYear(y, m) {
   const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
-  return `${months[month]} ${year}`;
+  return `${months[m]} ${y}`;
 }
 
-function showToast(msg, duration = 2500) {
+function showToast(msg, duration = 2800) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
@@ -894,74 +612,65 @@ function showToast(msg, duration = 2500) {
   window._toastTimer = setTimeout(() => t.classList.remove('show'), duration);
 }
 
-// ============================
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============================================================
 // TABS
-// ============================
-
+// ============================================================
 function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((el, i) => {
-    el.classList.remove('active');
-  });
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-
   const tabs = ['home','meds','calendar','settings'];
-  const idx = tabs.indexOf(name);
-  document.querySelectorAll('.tab')[idx].classList.add('active');
+  document.querySelectorAll('.tab')[tabs.indexOf(name)].classList.add('active');
   document.getElementById('tab-' + name).classList.add('active');
-
   if (name === 'calendar') renderCalendar();
   if (name === 'home') renderHome();
   if (name === 'meds') renderMedList();
+  if (name === 'settings') { updateNotifStatus(); updateSwStatus(); }
 }
 
-// ============================
+// ============================================================
 // HOME
-// ============================
-
+// ============================================================
 function renderHome() {
   const now = new Date();
   document.getElementById('todayDate').textContent = hebrewDate(now);
-
   const meds = loadMeds();
   document.getElementById('statTotal').textContent = meds.length;
 
-  // Stats
-  const today = now;
-  const firstOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   let takenCount = 0;
-  let d = new Date(firstOfMonth);
-  while (d <= today) {
+  const first = new Date(now.getFullYear(), now.getMonth(), 1);
+  let d = new Date(first);
+  while (d <= now) {
     const ds = formatDateStr(d);
     meds.forEach(m => { if (isTaken(m.id, ds)) takenCount++; });
     d.setDate(d.getDate() + 1);
   }
   document.getElementById('statMonth').textContent = takenCount;
 
-  // Streak: consecutive days all meds taken (going backwards from yesterday)
   let streak = 0;
-  let checkD = new Date(today);
-  checkD.setDate(checkD.getDate() - 1);
   if (meds.length > 0) {
+    let cd = new Date(now); cd.setDate(cd.getDate() - 1);
     for (let i = 0; i < 365; i++) {
-      const ds = formatDateStr(checkD);
-      const allTaken = meds.every(m => isTaken(m.id, ds));
-      if (!allTaken) break;
+      const ds = formatDateStr(cd);
+      if (!meds.every(m => isTaken(m.id, ds))) break;
       streak++;
-      checkD.setDate(checkD.getDate() - 1);
+      cd.setDate(cd.getDate() - 1);
     }
   }
   document.getElementById('statStreak').textContent = streak;
 
-  // Today's med list
+  const ds = todayStr();
   const todayList = document.getElementById('todayMedList');
   const quickList = document.getElementById('quickTakeList');
   const quickCard = document.getElementById('quickTakeCard');
 
-  if (meds.length === 0) {
+  if (!meds.length) {
     todayList.innerHTML = `<div class="empty-state"><div class="empty-icon">💊</div><p>עדיין לא הוגדרו תרופות.<br>עבור ללשונית "תרופות" כדי להוסיף.</p></div>`;
     quickCard.style.display = 'none';
   } else {
-    const ds = todayStr();
     todayList.innerHTML = meds.map(m => {
       const taken = isTaken(m.id, ds);
       return `<div class="med-item">
@@ -974,7 +683,6 @@ function renderHome() {
       </div>`;
     }).join('');
 
-    // Quick take
     const notTaken = meds.filter(m => !isTaken(m.id, ds));
     if (notTaken.length > 0) {
       quickCard.style.display = 'block';
@@ -984,17 +692,12 @@ function renderHome() {
             <div style="font-size:15px;font-weight:700">${escHtml(m.name)}</div>
             <div style="font-size:12px;color:var(--accent);direction:ltr;display:inline-block">${m.time}</div>
           </div>
-          <button class="btn btn-success" style="width:auto;padding:10px 16px;font-size:13px" onclick="quickTake('${m.id}')">
-            ✅ סמן
-          </button>
-        </div>
-      `).join('');
+          <button class="btn btn-success" style="width:auto;padding:10px 16px;font-size:13px" onclick="quickTake('${m.id}')">✅ סמן</button>
+        </div>`).join('');
     } else {
       quickCard.style.display = 'none';
     }
   }
-
-  // Next reminder
   updateNextReminder(meds);
 }
 
@@ -1007,10 +710,8 @@ function quickTake(medId) {
 function updateNextReminder(meds) {
   const block = document.getElementById('nextReminderBlock');
   if (!meds.length) { block.style.display = 'none'; return; }
-
   const now = new Date();
   const nowMins = now.getHours() * 60 + now.getMinutes();
-
   let next = null, minDiff = Infinity;
   meds.forEach(m => {
     const [h, min] = m.time.split(':').map(Number);
@@ -1019,7 +720,6 @@ function updateNextReminder(meds) {
     if (diff <= 0) diff += 1440;
     if (diff < minDiff) { minDiff = diff; next = m; }
   });
-
   if (next) {
     block.style.display = 'flex';
     document.getElementById('nextMedName').textContent = next.name;
@@ -1029,36 +729,30 @@ function updateNextReminder(meds) {
   }
 }
 
-// ============================
+// ============================================================
 // MEDICATIONS
-// ============================
-
+// ============================================================
 function addMed() {
   const name = document.getElementById('medName').value.trim();
   const time = document.getElementById('medTime').value;
   if (!name) { showToast('⚠️ אנא הזן שם תרופה'); return; }
   if (!time) { showToast('⚠️ אנא בחר שעה'); return; }
-
   const meds = loadMeds();
   const med = { id: genId(), name, time };
   meds.push(med);
   saveMeds(meds);
-
   document.getElementById('medName').value = '';
   document.getElementById('medTime').value = '08:00';
-
   renderMedList();
-  scheduleNotifications();
+  syncWithSW();
   showToast(`💊 ${name} נוספה בהצלחה!`);
 }
 
 function deleteMed(id) {
   if (!confirm('האם למחוק תרופה זו?')) return;
-  let meds = loadMeds();
-  meds = meds.filter(m => m.id !== id);
-  saveMeds(meds);
+  saveMeds(loadMeds().filter(m => m.id !== id));
   renderMedList();
-  scheduleNotifications();
+  syncWithSW();
   showToast('🗑️ התרופה נמחקה');
 }
 
@@ -1066,7 +760,7 @@ function renderMedList() {
   const meds = loadMeds();
   const el = document.getElementById('medList');
   if (!meds.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>אין תרופות עדיין.<br>הוסף תרופה למעלה כדי להתחיל.</p></div>`;
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>אין תרופות עדיין.</p></div>`;
     return;
   }
   const sorted = [...meds].sort((a, b) => a.time.localeCompare(b.time));
@@ -1078,14 +772,12 @@ function renderMedList() {
         <div class="med-time">${m.time}</div>
       </div>
       <button class="btn btn-danger" onclick="deleteMed('${m.id}')">🗑️ מחק</button>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-// ============================
+// ============================================================
 // CALENDAR
-// ============================
-
+// ============================================================
 let calYear, calMonth, selectedMedId = null;
 
 function initCalendar() {
@@ -1093,23 +785,11 @@ function initCalendar() {
   calYear = now.getFullYear();
   calMonth = now.getMonth();
 }
-
-function prevMonth() {
-  calMonth--;
-  if (calMonth < 0) { calMonth = 11; calYear--; }
-  renderCalendar();
-}
-
-function nextMonth() {
-  calMonth++;
-  if (calMonth > 11) { calMonth = 0; calYear++; }
-  renderCalendar();
-}
+function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
+function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
 
 function renderCalendar() {
   const meds = loadMeds();
-
-  // Selector chips
   const selector = document.getElementById('calMedSelector');
   if (!meds.length) {
     selector.innerHTML = '<span style="color:var(--text-muted);font-size:13px">הוסף תרופות כדי להציג לוח שנה</span>';
@@ -1118,88 +798,140 @@ function renderCalendar() {
     document.getElementById('calMonthLabel').textContent = '';
     return;
   }
-
-  if (!selectedMedId || !meds.find(m => m.id === selectedMedId)) {
-    selectedMedId = meds[0].id;
-  }
-
-  selector.innerHTML = meds.map(m => `
-    <button class="med-chip ${m.id === selectedMedId ? 'active' : ''}"
-      onclick="selectCalMed('${m.id}')">${escHtml(m.name)}</button>
-  `).join('');
-
-  // Calendar grid
+  if (!selectedMedId || !meds.find(m => m.id === selectedMedId)) selectedMedId = meds[0].id;
+  selector.innerHTML = meds.map(m =>
+    `<button class="med-chip ${m.id === selectedMedId ? 'active' : ''}" onclick="selectCalMed('${m.id}')">${escHtml(m.name)}</button>`
+  ).join('');
   document.getElementById('calMonthLabel').textContent = hebrewMonthYear(calYear, calMonth);
-
   const dayNames = ['א','ב','ג','ד','ה','ו','ש'];
-  document.getElementById('calDayNames').innerHTML = dayNames.map(d =>
-    `<div class="cal-day-name">${d}</div>`).join('');
-
-  const firstDay = new Date(calYear, calMonth, 1).getDay(); // 0=Sun
+  document.getElementById('calDayNames').innerHTML = dayNames.map(d => `<div class="cal-day-name">${d}</div>`).join('');
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
   const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
   const today = new Date();
   const todayDs = formatDateStr(today);
-
   let html = '';
-  // Empty cells before first day
-  for (let i = 0; i < firstDay; i++) {
-    html += `<div class="cal-day empty"></div>`;
-  }
-
-  let takenCount = 0;
-  let pastDays = 0;
-
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day empty"></div>`;
+  let takenCount = 0, pastDays = 0;
   for (let day = 1; day <= daysInMonth; day++) {
     const d = new Date(calYear, calMonth, day);
     const ds = formatDateStr(d);
     const isToday = ds === todayDs;
     const isFuture = d > today && !isToday;
-    const isPast = d < today;
     const taken = isTaken(selectedMedId, ds);
-
     if (taken) takenCount++;
-    if (isPast || isToday) pastDays++;
-
-    let cls = 'cal-day';
-    if (taken) cls += ' taken';
-    else if (isToday) cls += ' today';
-    else if (isFuture) cls += ' future';
-    else cls += ' past';
-
-    const clickable = !isFuture;
-    html += `<div class="${cls}" ${clickable ? `onclick="toggleDay('${ds}')"` : ''}>${day}</div>`;
+    if (!isFuture) pastDays++;
+    let cls = 'cal-day' + (taken ? ' taken' : isToday ? ' today' : isFuture ? ' future' : ' past');
+    html += `<div class="${cls}" ${!isFuture ? `onclick="toggleDay('${ds}')"` : ''}>${day}</div>`;
   }
-
   document.getElementById('calGrid').innerHTML = html;
-
-  // Stats
   document.getElementById('calStatTaken').textContent = takenCount;
   document.getElementById('calStatDays').textContent = pastDays;
   const pct = pastDays > 0 ? Math.round(takenCount / pastDays * 100) : 0;
   document.getElementById('calStatPct').textContent = pct + '%';
 }
-
-function selectCalMed(id) {
-  selectedMedId = id;
-  renderCalendar();
-}
-
+function selectCalMed(id) { selectedMedId = id; renderCalendar(); }
 function toggleDay(ds) {
   if (!selectedMedId) return;
-  const current = isTaken(selectedMedId, ds);
-  setTaken(selectedMedId, ds, !current);
+  const cur = isTaken(selectedMedId, ds);
+  setTaken(selectedMedId, ds, !cur);
   renderCalendar();
-  showToast(current ? '❌ סימון הוסר' : '✅ נטילה סומנה!');
+  showToast(cur ? '❌ סימון הוסר' : '✅ נטילה סומנה!');
 }
 
-// ============================
-// NOTIFICATIONS
-// ============================
+// ============================================================
+// SERVICE WORKER
+// ============================================================
+let swReg = null;
 
+async function registerSW() {
+  if (!('serviceWorker' in navigator)) {
+    showSwBanner('⚠️ הדפדפן אינו תומך ב-Service Worker — התרעות ברקע לא יפעלו', 'warn');
+    return;
+  }
+  try {
+    swReg = await navigator.serviceWorker.register('./sw.js', { scope: './' });
+    console.log('[SW] Registered:', swReg.scope);
+
+    // Listen for messages from SW
+    navigator.serviceWorker.addEventListener('message', onSwMessage);
+
+    swReg.addEventListener('updatefound', () => {
+      const nw = swReg.installing;
+      nw.addEventListener('statechange', () => {
+        if (nw.state === 'activated') {
+          showSwBanner('✅ Service Worker פעיל — התרעות ברקע מופעלות', 'ok');
+          syncWithSW();
+        }
+      });
+    });
+
+    // If already active
+    if (swReg.active) {
+      showSwBanner('✅ Service Worker פעיל — התרעות ברקע מופעלות', 'ok');
+      syncWithSW();
+    }
+  } catch (err) {
+    console.error('[SW] Registration failed:', err);
+    showSwBanner('❌ שגיאה ב-Service Worker: ' + err.message, 'warn');
+  }
+}
+
+function showSwBanner(msg, type) {
+  const b = document.getElementById('swBanner');
+  b.textContent = msg;
+  b.className = 'sw-banner show' + (type === 'warn' ? ' warn' : '');
+  setTimeout(() => b.classList.remove('show'), 6000);
+}
+
+function updateSwStatus() {
+  const row = document.getElementById('swStatusRow');
+  const text = document.getElementById('swStatusText');
+  if (!('serviceWorker' in navigator)) {
+    row.className = 'sw-status-row err';
+    row.querySelector('.status-dot').style.background = 'var(--red)';
+    text.textContent = 'הדפדפן אינו תומך — התרעות ברקע לא יפעלו';
+    return;
+  }
+  navigator.serviceWorker.getRegistration('./').then(reg => {
+    if (reg && reg.active) {
+      row.className = 'sw-status-row ok';
+      row.querySelector('.status-dot').style.cssText = 'background:var(--green);box-shadow:0 0 6px var(--green)';
+      text.textContent = 'פעיל ✓ — התרעות ישלחו גם כשהאפליקציה ברקע';
+    } else {
+      row.className = 'sw-status-row err';
+      row.querySelector('.status-dot').style.background = 'var(--red)';
+      text.textContent = 'לא פעיל — יש לרענן ולנסות שוב';
+    }
+  });
+}
+
+// Send meds to SW for scheduling
+function syncWithSW() {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.ready.then(reg => {
+    if (reg.active) {
+      reg.active.postMessage({ type: 'SCHEDULE', meds: loadMeds() });
+    }
+  }).catch(() => {});
+}
+
+// Handle messages from SW (e.g. AUTO_TAKEN when user clicks notification)
+function onSwMessage(e) {
+  if (e.data && e.data.type === 'AUTO_TAKEN' && e.data.action === 'taken') {
+    setTaken(e.data.medId, todayStr(), true);
+    renderHome();
+    showToast('✅ נטילה סומנה דרך ההתרעה!');
+  }
+}
+
+// ============================================================
+// NOTIFICATIONS
+// ============================================================
 function updateNotifStatus() {
   const box = document.getElementById('notifStatusBox');
   const text = document.getElementById('notifStatusText');
   const btn = document.getElementById('notifBtn');
+  const testBtn = document.getElementById('testBtn');
 
   if (!('Notification' in window)) {
     box.className = 'notif-status denied';
@@ -1207,114 +939,101 @@ function updateNotifStatus() {
     btn.style.display = 'none';
     return;
   }
-
   const perm = Notification.permission;
   if (perm === 'granted') {
     box.className = 'notif-status granted';
-    text.textContent = 'התרעות מופעלות ✓';
+    text.textContent = 'הרשאה אושרה ✓';
     btn.style.display = 'none';
+    testBtn.style.display = 'block';
   } else if (perm === 'denied') {
     box.className = 'notif-status denied';
-    text.textContent = 'התרעות חסומות — יש לאפשר בהגדרות הדפדפן';
-    btn.textContent = '⚙️ פתח הגדרות דפדפן';
-    btn.onclick = () => showToast('פתח הגדרות ← Privacy ← Notifications');
+    text.textContent = 'חסום! פתח הגדרות דפדפן ← Notifications ← אפשר';
+    btn.style.display = 'none';
   } else {
     box.className = 'notif-status default';
-    text.textContent = 'נדרשת הרשאה לשליחת התרעות';
+    text.textContent = 'נדרשת הרשאה — ללא הרשאה לא יישלחו התרעות';
     btn.style.display = 'block';
-    btn.onclick = requestNotifications;
+    testBtn.style.display = 'none';
   }
+
+  // iOS detection
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  if (isIOS) document.getElementById('iosNote').style.display = 'block';
 }
 
 async function requestNotifications() {
-  if (!('Notification' in window)) {
-    showToast('הדפדפן אינו תומך בהתרעות');
-    return;
-  }
+  if (!('Notification' in window)) { showToast('הדפדפן אינו תומך בהתרעות'); return; }
   const perm = await Notification.requestPermission();
   updateNotifStatus();
   if (perm === 'granted') {
-    showToast('✅ התרעות הופעלו בהצלחה!');
-    scheduleNotifications();
+    showToast('✅ התרעות הופעלו! כעת הן יישלחו גם ברקע.');
+    syncWithSW();
   } else {
-    showToast('❌ ההרשאה נדחתה');
+    showToast('❌ ההרשאה נדחתה — יש לאפשר בהגדרות הדפדפן');
   }
 }
 
-function scheduleNotifications() {
-  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
-
-  // Clear existing timers
-  if (window._notifTimers) window._notifTimers.forEach(clearTimeout);
-  window._notifTimers = [];
-
-  const meds = loadMeds();
-  const now = new Date();
-
-  meds.forEach(med => {
-    const [h, min] = med.time.split(':').map(Number);
-    const target = new Date();
-    target.setHours(h, min, 0, 0);
-
-    let diff = target - now;
-    if (diff < 0) diff += 24 * 60 * 60 * 1000; // next day
-
-    if (diff < 24 * 60 * 60 * 1000) {
-      const timer = setTimeout(() => {
-        sendNotification(med);
-        // Reschedule for next day
-        setTimeout(() => scheduleNotifications(), 2000);
-      }, diff);
-      window._notifTimers.push(timer);
-    }
-  });
+function sendTestNotification() {
+  if (Notification.permission !== 'granted') {
+    showToast('⚠️ יש לאשר התרעות תחילה');
+    return;
+  }
+  // Use SW for test — so it works even in background
+  if (swReg && swReg.active) {
+    swReg.active.postMessage({
+      type: 'SCHEDULE',
+      meds: [{ id: 'test-' + Date.now(), name: 'בדיקה — התרעה פועלת ✓', time: getTimeInSeconds(5) }]
+    });
+    showToast('🧪 התרעת בדיקה תגיע תוך ~5 שניות...', 4000);
+    // restore real schedule after 10s
+    setTimeout(() => syncWithSW(), 10000);
+  } else {
+    // Fallback: direct notification
+    new Notification('🧪 התרעת בדיקה', {
+      body: 'אם אתה רואה זאת — התרעות פועלות!',
+      icon: buildIconDataUrl(),
+      requireInteraction: true
+    });
+  }
 }
 
-function sendNotification(med) {
-  if (Notification.permission !== 'granted') return;
-  const n = new Notification('💊 תזכורת תרופות', {
-    body: `הגיע הזמן לקחת: ${med.name} (${med.time})`,
-    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">💊</text></svg>',
-    tag: med.id,
-    requireInteraction: true
-  });
-  n.onclick = () => { window.focus(); n.close(); };
+function getTimeInSeconds(sec) {
+  const d = new Date(Date.now() + sec * 1000);
+  return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
 }
 
-// ============================
-// DATA MANAGEMENT
-// ============================
+function buildIconDataUrl() {
+  return 'data:image/svg+xml,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">' +
+    '<rect width="100" height="100" rx="22" fill="#1a2f4e"/>' +
+    '<text y="72" x="50" text-anchor="middle" font-size="60">💊</text></svg>'
+  );
+}
 
+// ============================================================
+// DATA
+// ============================================================
 function clearAllData() {
   if (!confirm('האם אתה בטוח? כל הנתונים יימחקו.')) return;
   localStorage.removeItem(STORAGE_KEYS.meds);
   localStorage.removeItem(STORAGE_KEYS.taken);
   selectedMedId = null;
+  syncWithSW();
   renderMedList();
   renderHome();
   showToast('🗑️ כל הנתונים נמחקו');
 }
 
-// ============================
-// UTILS
-// ============================
-
-function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ============================
+// ============================================================
 // INIT
-// ============================
-
+// ============================================================
 function init() {
   initCalendar();
   renderHome();
   renderMedList();
   updateNotifStatus();
-  scheduleNotifications();
+  registerSW();
 
-  // Update header
   const now = new Date();
   const hours = now.getHours();
   let emoji = '🌙', greeting = 'לילה טוב';
@@ -1324,9 +1043,7 @@ function init() {
   document.getElementById('headerEmoji').textContent = emoji;
   document.getElementById('headerSub').textContent = greeting + ' — אל תשכח את התרופות שלך';
 
-  // Re-check every minute (for notifications & home update)
   setInterval(() => {
-    scheduleNotifications();
     if (document.getElementById('tab-home').classList.contains('active')) renderHome();
   }, 60000);
 }
